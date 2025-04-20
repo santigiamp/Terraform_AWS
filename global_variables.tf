@@ -13,43 +13,42 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "customer_gateway_ip" {
+  description = "IP address of the customer gateway"
+  type        = string
+}
+
+# Database credentials
 variable "db1_username" {
-  description = "Usuario para la base de datos DB1"
+  description = "Username for database 1"
   type        = string
   sensitive   = true
 }
 
 variable "db1_password" {
-  description = "Contraseña para la base de datos DB1"
+  description = "Password for database 1"
   type        = string
   sensitive   = true
 }
 
 variable "db1_host" {
-  description = "Host para la base de datos DB1"
+  description = "Host for database 1"
   type        = string
 }
 
 variable "db2_username" {
-  description = "Usuario para la base de datos DB2"
+  description = "Username for database 2"
   type        = string
   sensitive   = true
 }
 
 variable "db2_password" {
-  description = "Contraseña para la base de datos DB2"
+  description = "Password for database 2"
   type        = string
   sensitive   = true
 }
 
 variable "db2_host" {
-  description = "Host para la base de datos DB2"
+  description = "Host for database 2"
   type        = string
-}
-
-variable "customer_gateway_ip" {
-  description = "IP address of the customer gateway (on-premise)"
-  type        = string
-  default     = "0.0.0.0"  # Este es un valor por defecto, debe ser reemplazado con la IP real
-}
-
+} 

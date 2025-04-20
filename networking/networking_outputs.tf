@@ -8,11 +8,6 @@ output "subnet_id" {
   value       = aws_subnet.main.id
 }
 
-output "glue_security_group_id" {
-  description = "ID of the Glue security group"
-  value       = aws_security_group.glue.id
-}
-
 output "redshift_security_group_id" {
   description = "ID of the Redshift security group"
   value       = aws_security_group.redshift.id

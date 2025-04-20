@@ -18,24 +18,6 @@ resource "aws_subnet" "main" {
   })
 }
 
-resource "aws_security_group" "glue" {
-  name        = "glue-security-group"
-  description = "Security group for Glue connections"
-  vpc_id      = aws_vpc.vpc.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = [var.vpc_cidr]
-    description = "Allow outbound traffic within VPC"
-  }
-
-  tags = merge(var.tags, {
-    Name = "glue-sg"
-  })
-}
-
 resource "aws_security_group" "redshift" {
   name        = "redshift-security-group"
   description = "Security group for Redshift Serverless"
@@ -45,7 +27,7 @@ resource "aws_security_group" "redshift" {
     from_port       = 5439
     to_port         = 5439
     protocol        = "tcp"
-    security_groups = [aws_security_group.glue.id]
+    security_groups = [var.glue_security_group_id]
     description     = "Allow Redshift access from Glue"
   }
 

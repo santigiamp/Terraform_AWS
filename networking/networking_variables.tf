@@ -24,4 +24,9 @@ variable "availability_zone" {
   description = "Availability zone for resources"
   type        = string
   default     = "sa-east-1a"
+}
+
+variable "glue_security_group_id" {
+  description = "ID of the Glue security group"
+  type        = string
 } 

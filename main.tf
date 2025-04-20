@@ -2,12 +2,14 @@ module "networking" {
   source = "./networking"
   tags   = var.tags
   customer_gateway_ip = var.customer_gateway_ip
+  glue_security_group_id = module.security.glue_security_group_id
 }
 
 module "security" {
   source = "./security"
   tags   = var.tags
   vpc_id = module.networking.vpc_id
+  vpc_cidr = "10.0.0.0/16"
 }
 
 module "s3" {
