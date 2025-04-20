@@ -21,13 +21,17 @@ La infraestructura está organizada en los siguientes módulos:
 - Secrets Manager para credenciales
   - Redshift admin credentials
   - DB credentials
+  - DB1 credentials
+  - DB2 credentials
+- Security Group for Glue
 
-### 3. S3 (`./s3`)
+### 3. Staging (`./staging`)
 - Bucket S3 para datos de staging
-  - Encriptación SSE-S3
+  - Encriptación SSE-KMS
   - Versionado habilitado
   - Políticas de retención (30 días)
   - Estructura de prefijos organizada
+- S3 bucket for main data
 
 ### 4. Redshift (`./redshift`)
 - Namespace Serverless
@@ -67,7 +71,7 @@ La infraestructura está organizada en los siguientes módulos:
 ## Seguridad
 
 ### Encriptación
-- **S3**: SSE-S3 (AES-256)
+- **S3**: SSE-KMS
 - **Redshift**: KMS
 - **Logs**: KMS
 - **Notificaciones**: KMS
@@ -156,7 +160,7 @@ terraform apply
 ├── terraform.tfvars    # Valores de variables
 ├── networking/         # Configuración de red
 ├── security/          # Configuración de seguridad
-├── s3/               # Configuración de S3
+├── staging/               # Configuración de S3
 ├── redshift/         # Configuración de Redshift
 ├── glue/            # Configuración de Glue
 └── monitoring/      # Configuración de monitoreo
