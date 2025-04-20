@@ -1,30 +1,34 @@
-resource "aws_s3_bucket" "staging" {
-  bucket = "staging-data-${var.environment}"
-
-  tags = merge(var.tags, {
-    Name = "staging-bucket"
-  })
+resource "aws_s3_bucket" "main" {
+  bucket = "staging-${random_string.bucket_suffix.result}"
+  
+  tags = var.tags
 }
 
-resource "aws_s3_bucket_versioning" "staging" {
-  bucket = aws_s3_bucket.staging.id
+resource "random_string" "bucket_suffix" {
+  length  = 8
+  special = false
+  upper   = false
+}
+
+resource "aws_s3_bucket_versioning" "main" {
+  bucket = aws_s3_bucket.main.id
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "staging" {
-  bucket = aws_s3_bucket.staging.id
+resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
+  bucket = aws_s3_bucket.main.id
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      kms_master_key_id = var.kms_key_arn
+      sse_algorithm     = "aws:kms"
     }
   }
-}
 
 resource "aws_s3_bucket_lifecycle_configuration" "staging" {
-  bucket = aws_s3_bucket.staging.id
+  bucket = aws_s3_bucket.main.id
 
   rule {
     id     = "retention-policy"
@@ -49,7 +53,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "staging" {
 }
 
 resource "aws_s3_bucket_policy" "glue_access" {
-  bucket = aws_s3_bucket.staging.id
+  bucket = aws_s3_bucket.main.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -65,8 +69,8 @@ resource "aws_s3_bucket_policy" "glue_access" {
           "s3:ListBucket"
         ]
         Resource = [
-          aws_s3_bucket.staging.arn,
-          "${aws_s3_bucket.staging.arn}/*"
+          aws_s3_bucket.main.arn,
+          "${aws_s3_bucket.main.arn}/*"
         ]
       }
     ]
@@ -85,7 +89,7 @@ resource "aws_cloudwatch_metric_alarm" "s3_size" {
   alarm_description  = "Alarma cuando el tamaño del bucket de staging excede 10 GB"
   
   dimensions = {
-    BucketName = var.staging_bucket
+    BucketName = aws_s3_bucket.main.bucket
     StorageType = "StandardStorage"
   }
 
@@ -107,7 +111,7 @@ resource "aws_cloudwatch_metric_alarm" "s3_objects" {
   alarm_description  = "Alarma cuando el número de objetos en el bucket de staging excede 100,000"
   
   dimensions = {
-    BucketName = var.staging_bucket
+    BucketName = aws_s3_bucket.main.bucket
     StorageType = "AllStorageTypes"
   }
 
@@ -141,7 +145,7 @@ resource "aws_sfn_state_machine" "etl_orchestration" {
         Type = "Task"
         Resource = "arn:aws:states:::aws-sdk:s3:headBucket"
         Parameters = {
-          Bucket = var.staging_bucket
+          Bucket = aws_s3_bucket.main.bucket
         }
         Next = "ExtractDB1"
         Catch = [
@@ -167,7 +171,7 @@ resource "aws_sfn_state_machine" "etl_orchestration" {
           Arguments = {
             "--database" = "db1"
             "--table" = "table1"
-            "--output_path" = "s3://${var.staging_bucket}/staging/db1/table1/dt=$${$.execution.startTime}"
+            "--output_path" = "s3://${aws_s3_bucket.main.bucket}/staging/db1/table1/dt=$${$.execution.startTime}"
           }
         }
         Next = "ValidateDB1"
@@ -216,7 +220,7 @@ resource "aws_sfn_state_machine" "etl_orchestration" {
           Arguments = {
             "--database" = "db2"
             "--table" = "table2"
-            "--output_path" = "s3://${var.staging_bucket}/staging/db2/table2/dt=$${$.execution.startTime}"
+            "--output_path" = "s3://${aws_s3_bucket.main.bucket}/staging/db2/table2/dt=$${$.execution.startTime}"
           }
         }
         Next = "ValidateDB2"
@@ -324,8 +328,8 @@ resource "aws_iam_role_policy" "step_functions" {
           "s3:ListBucket"
         ]
         Resource = [
-          "arn:aws:s3:::${var.staging_bucket}",
-          "arn:aws:s3:::${var.staging_bucket}/*"
+          "arn:aws:s3:::${aws_s3_bucket.main.bucket}",
+          "arn:aws:s3:::${aws_s3_bucket.main.bucket}/*"
         ]
       },
       {
@@ -337,4 +341,12 @@ resource "aws_iam_role_policy" "step_functions" {
       }
     ]
   })
-} 
+}
+
+output "bucket_name" {
+  value = aws_s3_bucket.main.id
+}
+
+output "bucket_arn" {
+  value = aws_s3_bucket.main.arn
+}
