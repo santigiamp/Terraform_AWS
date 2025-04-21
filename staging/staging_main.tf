@@ -1,7 +1,5 @@
 resource "aws_s3_bucket" "main" {
-  bucket = "staging-${random_string.bucket_suffix.result}"
-  
-  tags = var.tags
+  # configuración del bucket
 }
 
 resource "random_string" "bucket_suffix" {
@@ -343,10 +341,4 @@ resource "aws_iam_role_policy" "step_functions" {
   })
 }
 
-output "bucket_name" {
-  value = aws_s3_bucket.main.id
-}
 
-output "bucket_arn" {
-  value = aws_s3_bucket.main.arn
-}

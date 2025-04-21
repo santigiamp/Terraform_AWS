@@ -1,37 +1,35 @@
-# Archivos locales de Terraform
-.terraform/
-.terraform.lock.hcl
-terraform.tfstate
-terraform.tfstate.backup
+# Archivos y carpetas de Terraform
 *.tfstate
 *.tfstate.*
+.terraform/
 crash.log
-crash.*.log
 *.tfvars
-*.tfvars.json
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-.terraformrc
-terraform.rc
+.terraform.lock.hcl
 
+# Archivos de credenciales y secretos
+*.pem
+*.key
+*.env
+*.secret
+*.secrets
+*.bak
 
-# Archivos de IDE
-.idea/
+# Archivos de salida y logs
+*.log
+*.out
+
+# Archivos de configuración de IDE
 .vscode/
+.idea/
 *.swp
-*.swo
 
-# Archivos de sistema
+# Archivos del sistema
 .DS_Store
 Thumbs.db
 
-# Archivos de logs
-*.log
-
-# Archivos de variables locales
-*.tfvars.local
-
-# Archivos de plan
-*.tfplan 
+# Archivos de backup
+*~

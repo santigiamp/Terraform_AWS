@@ -15,17 +15,17 @@ output "redshift_endpoint" {
 
 output "bucket_name" {
   description = "Name of the S3 bucket"
-  value       = module.s3.bucket_name
+  value       = module.staging.bucket_name
 }
 
 output "glue_job_name" {
   description = "Name of the Glue job"
-  value       = module.glue.job_name
+  value       = module.glue.glue_job_name
 }
 
 output "glue_crawler_name" {
   description = "Name of the Glue crawler"
-  value       = module.glue.crawler_name
+  value       = module.glue.glue_crawler_name
 }
 
 output "redshift_workgroup_id" {

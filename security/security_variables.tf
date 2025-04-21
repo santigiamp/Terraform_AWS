@@ -24,3 +24,27 @@ variable "redshift_admin_username" {
   type        = string
   default     = "admin"
 } 
+
+variable "db1_username" {
+  type = string
+}
+
+variable "db1_password" {
+  type = string
+}
+
+variable "db1_host" {
+  type = string
+}
+
+variable "db2_username" {
+  type = string
+}
+
+variable "db2_password" {
+  type = string
+}
+
+variable "db2_host" {
+  type = string
+}

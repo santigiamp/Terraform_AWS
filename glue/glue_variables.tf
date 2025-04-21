@@ -27,3 +27,12 @@ variable "staging_bucket" {
   description = "Nombre del bucket de staging"
   type        = string
 } 
+
+# En glue/variables.tf
+variable "glue_job_name" {
+  type = string
+}
+
+variable "glue_crawler_name" {
+  type = string
+}

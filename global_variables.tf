@@ -16,6 +16,7 @@ variable "environment" {
 variable "customer_gateway_ip" {
   description = "IP address of the customer gateway"
   type        = string
+  default = "1.2.3.4"
 }
 
 # Database credentials
@@ -52,3 +53,15 @@ variable "db2_host" {
   description = "Host for database 2"
   type        = string
 } 
+
+variable "glue_job_name" {
+  default = "etl_job"
+}
+
+variable "glue_crawler_name" {
+  default = "crawler-db1"
+}
+
+variable "staging_bucket_name" {
+  default = "mvp-staging-bucket"
+}

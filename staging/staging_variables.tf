@@ -26,4 +26,4 @@ variable "kms_key_arn" {
 variable "staging_bucket" {
   description = "Nombre del bucket de staging"
   type        = string
-} 
+}
