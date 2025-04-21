@@ -8,6 +8,7 @@ terraform {
 }
 
 provider "aws" {
+  profile = "vscode-dev"
   region = "sa-east-1"
   # Las credenciales se pueden proporcionar de varias formas:
   # 1. Variables de entorno: AWS_ACCESS_KEY_ID y AWS_SECRET_ACCESS_KEY
