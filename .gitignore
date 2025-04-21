@@ -16,6 +16,7 @@ override.tf.json
 .terraformrc
 terraform.rc
 
+
 # Archivos de IDE
 .idea/
 .vscode/

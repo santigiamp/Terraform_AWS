@@ -1,3 +1,12 @@
+resource "aws_iam_user" "infra_admin" {
+  name = "infra_admin"
+}
+
+resource "aws_iam_user_policy_attachment" "infra_admin_admin_policy" {
+  user       = aws_iam_user.infra_admin.name
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
+}
+
 resource "aws_kms_key" "redshift" {
   description             = "KMS key for Redshift encryption"
   deletion_window_in_days = var.deletion_window_in_days
@@ -7,10 +16,10 @@ resource "aws_kms_key" "redshift" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "Enable IAM User Permissions"
+        Sid    = "AllowInfraAdminFullAccess"
         Effect = "Allow"
         Principal = {
-          AWS = "*"
+          AWS = aws_iam_user.infra_admin.arn
         }
         Action   = "kms:*"
         Resource = "*"
@@ -37,10 +46,10 @@ resource "aws_kms_key" "logs" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "Enable IAM User Permissions"
+        Sid    = "AllowInfraAdminFullAccess"
         Effect = "Allow"
         Principal = {
-          AWS = "*"
+          AWS = aws_iam_user.infra_admin.arn
         }
         Action   = "kms:*"
         Resource = "*"

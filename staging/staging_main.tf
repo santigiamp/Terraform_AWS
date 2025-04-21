@@ -26,7 +26,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
       sse_algorithm     = "aws:kms"
     }
   }
-
+}
 resource "aws_s3_bucket_lifecycle_configuration" "staging" {
   bucket = aws_s3_bucket.main.id
 
