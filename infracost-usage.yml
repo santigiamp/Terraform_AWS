@@ -1,0 +1,38 @@
+version: 0.1
+
+resource_usage:
+  aws_glue_job.main:
+    monthly_hours: 30
+
+  aws_glue_crawler.main:
+    monthly_hours: 30
+
+  aws_s3_bucket.main:
+    storage_gb: 5
+    monthly_put_requests: 1000
+    monthly_get_requests: 1000
+
+  aws_cloudwatch_log_group.glue_logs:
+    monthly_data_ingested_gb: 0.05
+    monthly_archival_storage_gb: 0.05
+    monthly_insights_data_scanned_gb: 0.01
+
+  aws_cloudwatch_log_group.vpc_flow_logs:
+    monthly_data_ingested_gb: 0.05
+    monthly_archival_storage_gb: 0.05
+    monthly_insights_data_scanned_gb: 0.01
+
+  aws_secretsmanager_secret.db1_credentials:
+    monthly_api_requests: 30
+
+  aws_secretsmanager_secret.db2_credentials:
+    monthly_api_requests: 30
+
+  aws_secretsmanager_secret.redshift_admin:
+    monthly_api_requests: 30
+
+  aws_sfn_state_machine.etl_orchestration:
+    monthly_state_transitions: 1500
+
+  module.redshift.aws_redshiftserverless_workgroup.main:
+    monthly_redshift_serverless_rpu_hours: 183  # 8 RPU * 0.75 h/día * 30.5 días
